@@ -8,7 +8,10 @@ As shown, it can hilight condition suffixes as well as any other suffixes that i
 This was a pain to make cuz people can't seem to be able to write documentation consistently.
 
 It will let you know if you have an invalid instruction because it only accepts valid suffixes, example:
-https://user-images.githubusercontent.com/30376152/113669585-df02aa80-96ab-11eb-9302-5ecf1fec187d.mp4
+
+![2fUETGDVfE](https://user-images.githubusercontent.com/30376152/113671131-dd39e680-96ad-11eb-95f8-68a73cf14a1e.gif)
+
+
 Though this video is a bit old - the dots are now the color of the instruction.
 
 Operands and operators are not part of the syntax.
