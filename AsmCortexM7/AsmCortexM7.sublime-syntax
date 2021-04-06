@@ -1,0 +1,1026 @@
+%YAML 1.2
+---
+# See http://www.sublimetext.com/docs/3/syntax.html
+file_extensions:
+  - ec
+scope: source.example-c
+contexts:
+  main:
+    # Strings begin and end with quotes, and use backslashes as an escape
+    # character
+    - match: '"'
+      scope: punctuation.definition.string.begin.example-c
+      push: double_quoted_string
+
+    # Comments begin with a '//' and finish at the end of the line
+    - match: '@'
+      scope: single.comment.example-c
+      push: line_comment
+
+    # preprocessor
+    - match: '\B\.[a-z_]+\b'
+      scope: preprocessor.example-c
+
+    # instructions
+    - include: instruction_kit
+
+    # instructions
+    #- match: >-
+    #    \b(
+    #      ADR|LDR|STR|LDM|STM|PLD|PUSH|POP|LDREX|STREX|CLREX|ADD|ADC|SUB|SBC|RSB|AND|ORR|EOR|BIC|ORN|ASR|LSL|LSR|ROR|RRX|CLZ|CMP|CMN|MOV|MVN|MOVT|REV|REV16|
+    #      REVSH|RBIT|SADD16|SADD8|SHADD16|SHADD8|SHASX|SHSAX|SHSUB16|SHSUB8|SSUB16|SSUB8|SASX|SSAX|TST|TEQ|UADD16|UADD8|UASX|USAX|UHADD16|UHADD8|UHASX|UHSAX|UHSUB16|
+    #      UHSUB8|SEL|USAD8|USADA8|USUB16|USUB8|MUL|MLA|MLS|UMULL|UMAAL|UMLAL|SMLA|SMLAW|SMLAD|SMLAL|SMLALD|SMLSD|SMLSLD|SMMLA|SMMLS|SMMUL|SMUAD|SMUSD|SMUL|SMULW|SMULL|
+    #      SDIV|UDIV|SSAT|USAT|SSAT16|USAT16|QADD|QSUB|QASX|QSAX|QDADD|QDSUB|UQASX|UQSAX|UQADD|UQSUB|PKHBT|PKHTB|SXT|UXT|SXTA|UXTA|BFC|BFI|SBFX|UBFX|B|BL|BX|BLX|CBZ|CBNZ|
+    #      IT|TBB|TBH|VABS|VADD|VCMP|VCMPE|VCVT|VCVTR|VCVTB|VCVTT|VDIV|VFMA|VFMS|VFNMA|VFNMS|VLDM|VLDR|VMLA|VMLS|VMOV|VMRS|VMSR|VMUL|VNEG|VNMLA|VNMLS|VNMUL|VPOP|VPUSH|VSQRT|
+    #      VSTM|VSTR|VSUB|VSEL|VMAXNM|VMINNM|VCVTA|VCVTN|VCVTP|VCVTM|VRINTR|VRINTX|VRINTA|VRINTN|VRINTP|VRINTM|VRINTZ|BKPT|CPS|DMB|DSB|ISB|MRS|MSR|NOP|SEV|SVC|WFE|WFI
+    #    )
+    #  scope: start.instruction.example-c
+    #  push: instruction_letsgo
+
+    # registers
+    - match: '(?i)\b(R((1[0-2])|([0-9]))|SP|PSP|MSP|LR|PC|PSR|PRIMASK|FAULTMASK|BASEPRI|CONTROL)\b'
+      scope: generic.register.example-c
+
+    # Numbers
+    - match: '\b(-)?[0-9]+(\.[0-9]+)?\b'
+      scope: number.decimal.example-c
+
+    - match: '\b0x[0-9A-Fa-f]+\b'
+      scope: number.hex.example-c
+
+    - match: '\b0b[0-1]+\b'
+      scope: number.bin.example-c
+
+  double_quoted_string:
+    - meta_scope: string.quoted.double.example-c
+    - match: '\\.'
+      scope: constant.character.escape.example-c
+    - match: '"'
+      scope: punctuation.definition.string.end.example-c
+      pop: true
+
+  line_comment:
+    - meta_scope: comment.line.example-c
+    - match: $
+      pop: true
+
+
+
+  instruction_kit:
+    - match: '(?i)\bLDM(IA|DB)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: mode.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bSTM(IA|DB)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: mode.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bPLD\b'
+      scope: instruction.example-c
+      captures:
+    - match: '(?i)\bCLREX(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSEL\b'
+      scope: instruction.example-c
+      captures:
+    - match: '(?i)\bUSAD8(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUSADA8(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUQADD(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUQSUB(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSXT(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUXT(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSXTAB(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUXTAH(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSXTAB16(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUXTAB(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSXTAH(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUXTAB16(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bCBZ\b'
+      scope: instruction.example-c
+      captures:
+    - match: '(?i)\bCBNZ\b'
+      scope: instruction.example-c
+      captures:
+    - match: '(?i)\bIT((?:T|E){0,3})[ \t]+(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL)\b'
+      scope: instruction.example-c
+      captures:
+        1: itfl.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bTBB\b'
+      scope: instruction.example-c
+      captures:
+    - match: '(?i)\bTBH\b'
+      scope: instruction.example-c
+      captures:
+    - match: '(?i)\bVSEL(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\.(F32|F64)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+        2: f3264.suffix.instruction.example-c
+    - match: '(?i)\bVMAXNM\.(F32|F64)\b'
+      scope: instruction.example-c
+      captures:
+        1: f3264.suffix.instruction.example-c
+    - match: '(?i)\bVMINNM\.(F32|F64)\b'
+      scope: instruction.example-c
+      captures:
+        1: f3264.suffix.instruction.example-c
+    - match: '(?i)\bVCVT(A|M|N|P)\.(S32)\.(F32|F64)\b'
+      scope: instruction.example-c
+      captures:
+        1: rmode.suffix.instruction.example-c
+        2: dS32.suffix.instruction.example-c
+        3: f3264.suffix.instruction.example-c
+    - match: '(?i)\bVCVT(A|M|N|P)\.(U32)\.(F32|F64)\b'
+      scope: instruction.example-c
+      captures:
+        1: rmode.suffix.instruction.example-c
+        2: dU32.suffix.instruction.example-c
+        3: f3264.suffix.instruction.example-c
+    - match: '(?i)\bVRINT(R|X)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\.(F32|F64)\b'
+      scope: instruction.example-c
+      captures:
+        1: RX.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+        3: f3264.suffix.instruction.example-c
+    - match: '(?i)\bVRINT(A|M|N|P|Z)\.(F32|F64)\b'
+      scope: instruction.example-c
+      captures:
+        1: rmode2.suffix.instruction.example-c
+        2: f3264.suffix.instruction.example-c
+    - match: '(?i)\bBKPT\b'
+      scope: instruction.example-c
+      captures:
+    - match: '(?i)\bCPS(IE|ID)\b'
+      scope: instruction.example-c
+      captures:
+        1: effect.suffix.instruction.example-c
+    - match: '(?i)\bDMB(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bDSB(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bISB(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bNOP(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSEV(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bWFE(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bWFI(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\b\b'
+      scope: instruction.example-c
+      captures:
+    - match: '(?i)\bADR(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bLDR(B|SB|H|SH|)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: type.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bLDRD(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSTR(B|SB|H|SH|)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: type.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bSTRD(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bLDR(B|SB|H|SH|)T(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: type.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bSTR(B|SB|H|SH|)T(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: type.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bPUSH(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bPOP(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bLDREX(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSTREX(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bLDREXB(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSTREXB(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bLDREXH(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSTREXH(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bADD(S|)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: S.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bADD(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bADC(S|)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: S.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bSUB(S|)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: S.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bSUB(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSBC(S|)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: S.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bRSB(S|)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: S.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bAND(S|)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: S.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bORR(S|)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: S.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bEOR(S|)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: S.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bBIC(S|)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: S.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bORN(S|)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: S.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bASR(S|)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: S.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bLSL(S|)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: S.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bLSR(S|)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: S.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bROR(S|)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: S.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bRRX(S|)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: S.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bCLZ(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bCMP(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bCMN(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bMOV(S|)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: S.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bMOV(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bMVN(S|)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: S.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bMOVT(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bREV(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bREV16(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bREVSH(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bRBIT(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSADD16(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSADD8(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSHADD16(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSHADD8(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSHASX(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSHSAX(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSHSUB16(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSHSUB8(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSSUB16(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSSUB8(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSASX(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSSAX(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bTST(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bTEQ(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUADD16(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUADD8(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUASX(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUSAX(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUHADD16(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUHADD8(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUHASX(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUHSAX(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUHSUB16(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUHSUB8(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUSUB16(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUSUB8(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bMUL(S|)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: S.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bMLA(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bMLS(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUMULL(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUMAAL(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUMLAL(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSMLA(BT|TB|BB|TT)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: XY.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bSMLA(B|T)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: Y.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bSMLAW(BT|TB|BB|TT)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: XY.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bSMLAW(B|T)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: Y.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bSMLAD(B|T)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: X.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bSMLAL(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSMLAL(BT|TB|BB|TT)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: XY.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bSMLAL(B|T)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: X.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bSMLALD(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSMLALD(BT|TB|BB|TT)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: XY.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bSMLALD(B|T)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: X.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bSMLSD(B|T)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: X.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bSMLSLD(B|T)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: X.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bSMMLA(R|)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: R.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bSMMLS(R|)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: R.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bSMMUL(R|)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: R.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bSMUAD(B|T)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: X.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bSMUSD(B|T)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: X.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bSMUL(BT|TB|BB|TT)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: XY.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bSMUL(B|T)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: Y.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bSMULW(BT|TB|BB|TT)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: XY.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bSMULW(B|T)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: Y.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+    - match: '(?i)\bSMULL(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSDIV(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUDIV(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSSAT(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUSAT(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSSAT16(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUSAT16(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bQADD(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bQSUB(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bQADD8(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bQSUB8(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bQADD16(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bQSUB16(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bQASX(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bQSAX(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bQDADD(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bQDSUB(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUQASX(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUQSAX(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUQADD8(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUQSUB8(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUQADD16(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUQSUB16(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bPKHBT(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bPKHTB(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSXTB(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUXTB(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSXTH(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUXTH(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSXTB16(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUXTB16(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSXTAB(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUXTAB(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSXTAH(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUXTAH(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSXTAB16(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUXTAB16(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bBFC(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bBFI(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSBFX(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bUBFX(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bB(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bBL(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bBX(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bBLX(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bVABS(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\.(F32|F64)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+        2: f3264.suffix.instruction.example-c
+    - match: '(?i)\bVADD(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\.(F32|F64)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+        2: f3264.suffix.instruction.example-c
+    - match: '(?i)\bVCMP(E|)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\.(F32|F64)\b'
+      scope: instruction.example-c
+      captures:
+        1: E.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+        3: f3264.suffix.instruction.example-c
+    - match: '(?i)\bVCVT(R|)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\.(S32|U32)\.(F32|F64)\b'
+      scope: instruction.example-c
+      captures:
+        1: R.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+        3: tm.suffix.instruction.example-c
+        4: f3264.suffix.instruction.example-c
+    - match: '(?i)\bVCVT(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\.(F32|F64)\.(S32|U32)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+        2: f3264.suffix.instruction.example-c
+        3: tm.suffix.instruction.example-c
+    - match: '(?i)\bVCVT(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\.(S32|U32|S16|U16)\.(F32|F64)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+        2: td.suffix.instruction.example-c
+        3: f3264.suffix.instruction.example-c
+    - match: '(?i)\bVCVT(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\.(F32|F64)\.(S32|U32|S16|U16)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+        2: f3264.suffix.instruction.example-c
+        3: td.suffix.instruction.example-c
+    - match: '(?i)\bVCVT(B|T)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\.(F32|F64)\.(F16)\b'
+      scope: instruction.example-c
+      captures:
+        1: Y.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+        3: f3264.suffix.instruction.example-c
+        4: f16.suffix.instruction.example-c
+    - match: '(?i)\bVCVT(B|T)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\.(F16)\.(F32|F64)\b'
+      scope: instruction.example-c
+      captures:
+        1: Y.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+        3: f16.suffix.instruction.example-c
+        4: f3264.suffix.instruction.example-c
+    - match: '(?i)\bVDIV(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\.(F32|F64)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+        2: f3264.suffix.instruction.example-c
+    - match: '(?i)\bVFMA(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\.(F32|F64)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+        2: f3264.suffix.instruction.example-c
+    - match: '(?i)\bVFMS(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\.(F32|F64)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+        2: f3264.suffix.instruction.example-c
+    - match: '(?i)\bVFNMA(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\.(F32|F64)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+        2: f3264.suffix.instruction.example-c
+    - match: '(?i)\bVFNMS(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\.(F32|F64)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+        2: f3264.suffix.instruction.example-c
+    - match: '(?i)\bVLDM(IA|DB)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)(?:\.(32|64))?\b'
+      scope: instruction.example-c
+      captures:
+        1: mode.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+        3: dotsize.suffix.instruction.example-c
+    - match: '(?i)\bVLDR(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)(?:\.(F32|F64))?\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+        2: f3264opt.suffix.instruction.example-c
+        3: f3264.suffix.instruction.example-c
+    - match: '(?i)\bVMLA(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\.(F32|F64)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+        2: f3264.suffix.instruction.example-c
+    - match: '(?i)\bVMLS(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\.(F32|F64)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+        2: f3264.suffix.instruction.example-c
+    - match: '(?i)\bVMOV(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\.(F32|F64)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+        2: f3264.suffix.instruction.example-c
+    - match: '(?i)\bVMOV(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)(?:\.(32))?\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+        2: d32.suffix.instruction.example-c
+    - match: '(?i)\bVMRS(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bVMSR(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bVMUL(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\.(F32|F64)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+        2: f3264.suffix.instruction.example-c
+    - match: '(?i)\bVNEG(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\.(F32|F64)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+        2: f3264.suffix.instruction.example-c
+    - match: '(?i)\bVNMLA(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\.(F32|F64)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+        2: f3264.suffix.instruction.example-c
+    - match: '(?i)\bVNMLS(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\.(F32|F64)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+        2: f3264.suffix.instruction.example-c
+    - match: '(?i)\bVNMUL(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\.(F32|F64)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+        2: f3264.suffix.instruction.example-c
+    - match: '(?i)\bVPOP(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)(?:\.(32|64))?\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+        2: dotsize.suffix.instruction.example-c
+    - match: '(?i)\bVPUSH(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)(?:\.(32|64))?\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+        2: dotsize.suffix.instruction.example-c
+    - match: '(?i)\bVSQRT(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\.(F32|F64)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+        2: f3264.suffix.instruction.example-c
+    - match: '(?i)\bVSTM(IA|DB)(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)(?:\.(32|64))?\b'
+      scope: instruction.example-c
+      captures:
+        1: mode.suffix.instruction.example-c
+        2: cond.suffix.instruction.example-c
+        3: dotsize.suffix.instruction.example-c
+    - match: '(?i)\bVSTR(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)(?:\.(32|64))?\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+        2: dotsize.suffix.instruction.example-c
+    - match: '(?i)\bVSUB(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\.(F32|F64)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+        2: f3264.suffix.instruction.example-c
+    - match: '(?i)\bMRS(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bMSR(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c
+    - match: '(?i)\bSVC(EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL|)\b'
+      scope: instruction.example-c
+      captures:
+        1: cond.suffix.instruction.example-c

@@ -1,0 +1,4 @@
+// These settings override both User and Default settings for the Synth syntax
+{
+	"color_scheme": "AsmCortexM7.sublime-color-scheme"
+}

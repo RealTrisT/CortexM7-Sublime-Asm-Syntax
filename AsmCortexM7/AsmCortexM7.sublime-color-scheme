@@ -1,0 +1,190 @@
+{
+    "name": "AsmCortexM7ColorScheme",
+    "globals":
+    {
+        "background": "rgb(34, 34, 34)",
+        "foreground": "#EEEEEE",
+        "caret": "white",
+        "selection": "#171717",
+        //"selection_foreground": "black"
+    },
+    "rules":
+    [
+        {
+            "name": "Comment",
+            "scope": "comment",
+            "foreground": "#888888",
+            "font_style": "italic",
+        },
+        {
+            "name": "String",
+            "scope": "string",
+            "foreground": "#856046",
+        },
+        {
+            "name": "Number",
+            "scope": "number",
+            "foreground": "#db5656",
+            "font_style": "italic",
+        },
+        {
+            "name": "Register",
+            "scope": "generic.register",
+            "foreground": "#e282fa",
+        },
+
+        //instruction color (the parts that aren't suffixes)
+        {
+            "name": "InstructionName",
+            "scope": "instruction",
+            "foreground": "#565cdb",
+        },
+
+        //the condition suffix that is orange by default
+        {
+            "name": "InstructionConditionSuffix",
+            "scope": "cond.suffix.instruction",
+            "foreground": "#ff9c38",
+        },
+
+
+
+
+        //suffixes for some specific instructions
+        {
+            "name": "InstructionTypeSuffix",
+            "scope": "type.suffix.instruction",
+            "foreground": "#a8a8a8",
+        },
+        {
+            "name": "InstructionModeSuffix",
+            "scope": "mode.suffix.instruction",
+            "foreground": "#a8a8a8",
+        },
+        {
+            "name": "InstructionRModeSuffix",
+            "scope": "rmode.suffix.instruction",
+            "foreground": "#a8a8a8",
+        },
+        {
+            "name": "InstructionRMode2Suffix",
+            "scope": "rmode2.suffix.instruction",
+            "foreground": "#a8a8a8",
+        },
+        {
+            "name": "InstructionEffectSuffix",
+            "scope": "effect.suffix.instruction",
+            "foreground": "#a8a8a8",
+        },
+        {
+            "name": "InstructionITFlagsSuffix",
+            "scope": "itfl.suffix.instruction",
+            "foreground": "#a8a8a8",
+        },
+
+
+
+        //more suffixes for some specific instructions
+        {
+            "name": "InstructionRXSuffix",
+            "scope": "RX.suffix.instruction.example-c",
+            "foreground": "#a8a8a8",
+        },
+        {
+            "name": "InstructionSSuffix",
+            "scope": "S.suffix.instruction.example-c",
+            "foreground": "#a8a8a8",
+        },
+        {
+            "name": "InstructionESuffix",
+            "scope": "E.suffix.instruction.example-c",
+            "foreground": "#a8a8a8",
+        },
+        {
+            "name": "InstructionRSuffix",
+            "scope": "R.suffix.instruction.example-c",
+            "foreground": "#a8a8a8",
+        },
+        {
+            "name": "InstructionXSuffix",
+            "scope": "X.suffix.instruction.example-c",
+            "foreground": "#a8a8a8",
+        },
+        {
+            "name": "InstructionYSuffix",
+            "scope": "Y.suffix.instruction.example-c",
+            "foreground": "#a8a8a8",
+        },
+        {
+            "name": "InstructionXYSuffix",
+            "scope": "XY.suffix.instruction.example-c",
+            "foreground": "#a8a8a8",
+        },
+
+
+
+
+
+        //pretty much just size suffixes
+        {
+            "name": "Instruction_dotsize_Suffix",
+            "scope": "dotsize.suffix.instruction.example-c",
+            "foreground": "#d1bc92",
+        },
+        {
+            "name": "Instruction_f3264opt_Suffix",
+            "scope": "f3264opt.suffix.instruction.example-c",
+            "foreground": "#d1bc92",
+        },
+        {
+            "name": "Instruction_f3264_Suffix",
+            "scope": "f3264.suffix.instruction.example-c",
+            "foreground": "#d1bc92",
+        },
+        {
+            "name": "Instruction_f16_Suffix",
+            "scope": "f16.suffix.instruction.example-c",
+            "foreground": "#d1bc92",
+        },
+        {
+            "name": "Instruction_tm_Suffix",
+            "scope": "tm.suffix.instruction.example-c",
+            "foreground": "#d1bc92",
+        },
+        {
+            "name": "Instruction_td_Suffix",
+            "scope": "td.suffix.instruction.example-c",
+            "foreground": "#d1bc92",
+        },
+        {
+            "name": "Instruction_d32_Suffix",
+            "scope": "d32.suffix.instruction.example-c",
+            "foreground": "#d1bc92",
+        },
+        {
+            "name": "Instruction_d64_Suffix",
+            "scope": "d64.suffix.instruction.example-c",
+            "foreground": "#d1bc92",
+        },
+        {
+            "name": "Instruction_dU32Suffix",
+            "scope": "dU32.suffix.instruction",
+            "foreground": "#d1bc92",
+        },
+        {
+            "name": "Instruction_dS32Suffix",
+            "scope": "dS32.suffix.instruction",
+            "foreground": "#d1bc92",
+        },
+
+        //preprocessor (pretty much anything which has a dot before it)
+        {
+            "name": "Preprocessor",
+            "scope": "preprocessor",
+            "foreground": "#ebb352",
+        }
+    ]
+}
+
+
+
