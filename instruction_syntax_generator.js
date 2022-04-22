@@ -75,6 +75,7 @@ CMN{cond}
 MOV{S}{cond}
 MOV{cond}
 MVN{S}{cond}
+MOVW{cond}
 MOVT{cond}
 REV{cond}
 REV16{cond}
